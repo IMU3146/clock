@@ -102,6 +102,38 @@
             color: #ffffff;
             border: 1px solid #555555;
         }
+
+        .preset {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .preset:hover {
+            background-color: #45a049;
+        }
+
+        #toggleDarkMode {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333333;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #toggleDarkMode:hover {
+            background-color: #555555;
+        }
     </style>
 </head>
 <body>
@@ -137,6 +169,7 @@
         <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
     </main>
     <script>
+        // JavaScriptコード
         // 現在の時刻を表示する時計の機能
         function updateClock() {
             const now = new Date();
@@ -147,7 +180,7 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
-
+        
         // ストップウォッチの機能
         let stopwatchInterval;
         let stopwatchTime = 0;
