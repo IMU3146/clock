@@ -1,3 +1,4 @@
+// scripts.js
 
 // 現在の時刻を表示する時計の機能
 function updateClock() {
