@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>便利な時計</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #clock, #stopwatch, #timer {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        .controls button {
+            font-size: 16px;
+            padding: 10px;
+            margin: 5px;
+        }
+        #laps {
+            list-style-type: none;
+            padding: 0;
+        }
+        #laps li {
+            font-size: 24px;
+            margin: 5px 0;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .dark-mode .controls button {
+            background-color: #333333;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleDarkMode">ダークモード切替</button>
+
+    <div id="clock">00:00:00</div>
+
+    <div id="stopwatch">00:00:00</div>
+    <div class="controls">
+        <button id="startStopwatch">Start</button>
+        <button id="stopStopwatch">Stop</button>
+        <button id="resetStopwatch">Reset</button>
+        <button id="lapStopwatch">Lap</button>
+    </div>
+    <ul id="laps"></ul>
+
+    <div id="timer">00:05:00</div>
+    <div class="controls">
+        <input type="number" id="minutes" placeholder="分" min="0">
+        <input type="number" id="seconds" placeholder="秒" min="0" max="59">
+        <button id="startTimer">Start Timer</button>
+        <button id="resetTimer">Reset Timer</button>
+    </div>
+    
+    <div id="timerPresets">
+        <button class="preset" data-time="300">5分</button>
+        <button class="preset" data-time="600">10分</button>
+        <button class="preset" data-time="900">15分</button>
+    </div>
+
+    <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
