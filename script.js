@@ -71,14 +71,7 @@ document.getElementById('lapStopwatch').addEventListener('click', () => {
 });
 
 // タイマーの機能
-let timerInterval;
-let timerTime = 300; // 初期値は5分 (300秒)
-
-function updateTimer() {
-    const minutes = String(Math.floor(timerTime / 60)).padStart(2, '0');
-    const seconds = String(timerTime % 60).padStart(2, '0');
-    document.getElementById('timer').textContent = `${minutes}:${seconds}`;
-}
+let timerInterval; // タイマーの間隔を格納する変数を定義
 
 // Start Timer ボタンのクリックイベント
 document.getElementById('startTimer').addEventListener('click', () => {
@@ -88,10 +81,13 @@ document.getElementById('startTimer').addEventListener('click', () => {
 
     // すでにタイマーが実行中でない場合にのみタイマーを開始する
     if (!timerInterval && timerTime > 0) {
+        // タイマーの最初の表示を更新する
+        updateTimer();
+
         timerInterval = setInterval(() => {
             if (timerTime > 0) {
                 timerTime--;
-                updateTimer();
+                updateTimer(); // タイマーの表示を更新する
             } else {
                 clearInterval(timerInterval);
                 document.getElementById('alertSound').play();
@@ -112,9 +108,8 @@ document.getElementById('resetTimer').addEventListener('click', () => {
     clearInterval(timerInterval);
     timerInterval = null;
     timerTime = 300; // 初期値に戻す
-    updateTimer();
+    updateTimer(); // タイマーの表示を更新する
 });
-
 
 // プリセットボタンの機能
 document.querySelectorAll('.preset').forEach(button => {
