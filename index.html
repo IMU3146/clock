@@ -134,6 +134,29 @@
         #toggleDarkMode:hover {
             background-color: #555555;
         }
+
+        /* スマートフォン向けのスタイル */
+        @media screen and (max-width: 600px) {
+            #clock, #stopwatch, #timer {
+                font-size: 36px;
+                padding: 8px;
+            }
+
+            .controls button, .controls input {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            #laps li {
+                font-size: 18px;
+                padding: 8px;
+            }
+
+            .preset, #toggleDarkMode {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
     </style>
 </head>
 <body>
