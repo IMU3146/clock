@@ -8,17 +8,50 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            margin-top: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
             transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+        }
+        main {
+            padding: 20px;
         }
         #clock, #stopwatch, #timer {
             font-size: 48px;
             margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .controls button {
             font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        .controls input {
+            font-size: 16px;
             padding: 10px;
             margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80px;
         }
         #laps {
             list-style-type: none;
@@ -27,47 +60,197 @@
         #laps li {
             font-size: 24px;
             margin: 5px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .dark-mode {
             background-color: #121212;
             color: #ffffff;
         }
-        .dark-mode .controls button {
+        .dark-mode #clock, .dark-mode #stopwatch, .dark-mode #timer {
             background-color: #333333;
             color: #ffffff;
+        }
+        .dark-mode .controls button {
+            background-color: #555555;
+        }
+        .dark-mode .controls button:hover {
+            background-color: #666666;
+        }
+        .dark-mode .controls input {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
         }
     </style>
 </head>
 <body>
-    <button id="toggleDarkMode">ダークモード切替</button>
+    <header>便利な時計</header>
+    <main>
+        <button id="toggleDarkMode">ダークモード切替</button>
 
-    <div id="clock">00:00:00</div>
+        <div id="clock">00:00:00</div>
 
-    <div id="stopwatch">00:00:00</div>
-    <div class="controls">
-        <button id="startStopwatch">Start</button>
-        <button id="stopStopwatch">Stop</button>
-        <button id="resetStopwatch">Reset</button>
-        <button id="lapStopwatch">Lap</button>
-    </div>
-    <ul id="laps"></ul>
+        <div id="stopwatch">00:00:00</div>
+        <div class="controls">
+            <button id="startStopwatch">Start</button>
+            <button id="stopStopwatch">Stop</button>
+            <button id="resetStopwatch">Reset</button>
+            <button id="lapStopwatch">Lap</button>
+        </div>
+        <ul id="laps"></ul>
 
-    <div id="timer">00:05:00</div>
-    <div class="controls">
-        <input type="number" id="minutes" placeholder="分" min="0">
-        <input type="number" id="seconds" placeholder="秒" min="0" max="59">
-        <button id="startTimer">Start Timer</button>
-        <button id="resetTimer">Reset Timer</button>
-    </div>
-    
-    <div id="timerPresets">
-        <button class="preset" data-time="300">5分</button>
-        <button class="preset" data-time="600">10分</button>
-        <button class="preset" data-time="900">15分</button>
-    </div>
+        <div id="timer">00:05:00</div>
+        <div class="controls">
+            <input type="number" id="minutes" placeholder="分" min="0">
+            <input type="number" id="seconds" placeholder="秒" min="0" max="59">
+            <button id="startTimer">Start Timer</button>
+            <button id="resetTimer">Reset Timer</button>
+        </div>
+        
+        <div id="timerPresets">
+            <button class="preset" data-time="300">5分</button>
+            <button class="preset" data-time="600">10分</button>
+            <button class="preset" data-time="900">15分</button>
+        </div>
 
-    <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+        <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+    </main>
+    <script>
+        // 現在の時刻を表示する時計の機能
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    <script src="scripts.js"></script>
+        // ストップウォッチの機能
+        let stopwatchInterval;
+        let stopwatchTime = 0;
+
+        function updateStopwatch() {
+            const hours = String(Math.floor(stopwatchTime / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((stopwatchTime % 3600) / 60)).padStart(2, '0');
+            const seconds = String(stopwatchTime % 60).padStart(2, '0');
+            document.getElementById('stopwatch').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        function saveStopwatchTime() {
+            localStorage.setItem('stopwatchTime', stopwatchTime);
+        }
+
+        function loadStopwatchTime() {
+            const savedTime = localStorage.getItem('stopwatchTime');
+            if (savedTime !== null) {
+                stopwatchTime = parseInt(savedTime, 10);
+                updateStopwatch();
+            }
+        }
+
+        document.getElementById('startStopwatch').addEventListener('click', () => {
+            if (!stopwatchInterval) {
+                stopwatchInterval = setInterval(() => {
+                    stopwatchTime++;
+                    updateStopwatch();
+                    saveStopwatchTime();
+                }, 1000);
+            }
+        });
+
+        document.getElementById('stopStopwatch').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+            saveStopwatchTime();
+        });
+
+        document.getElementById('resetStopwatch').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+            stopwatchTime = 0;
+            updateStopwatch();
+            localStorage.removeItem('stopwatchTime');
+        });
+
+        let laps = [];
+
+        document.getElementById('lapStopwatch').addEventListener('click', () => {
+            const lapTime = document.getElementById('stopwatch').textContent;
+            laps.push(lapTime);
+            const lapItem = document.createElement('li');
+            lapItem.textContent = lapTime;
+            document.getElementById('laps').appendChild(lapItem);
+        });
+
+        // タイマーの機能
+        let timerInterval;
+        let timerTime = 300; // 初期値は5分 (300秒)
+
+        function updateTimer() {
+            const minutes = String(Math.floor(timerTime / 60)).padStart(2, '0');
+            const seconds = String(timerTime % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        }
+
+        document.getElementById('startTimer').addEventListener('click', () => {
+            const inputMinutes = parseInt(document.getElementById('minutes').value) || 0;
+            const inputSeconds = parseInt(document.getElementById('seconds').value) || 0;
+            timerTime = (inputMinutes * 60) + inputSeconds;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timerTime > 0) {
+                    timerTime--;
+                    updateTimer();
+                } else {
+                    clearInterval(timerInterval);
+                    document.getElementById('alertSound').play();
+                    alert('Time is up!');
+                }
+            }, 1000);
+        });
+
+        document.getElementById('resetTimer').addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerTime = 300; // 初期値に戻す
+            updateTimer();
+        });
+
+        // プリセットボタンの機能
+        document.querySelectorAll('.preset').forEach(button => {
+            button.addEventListener('click', () => {
+                timerTime = parseInt(button.getAttribute('data-time'));
+                updateTimer();
+            });
+        });
+
+        // ダークモードの切り替え機能
+        document.getElementById('toggleDarkMode').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        function loadDarkMode() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // 初期表示の更新
+        updateStopwatch();
+        updateTimer();
+        loadStopwatchTime();
+        loadDarkMode();
+    </script>
 </body>
 </html>
