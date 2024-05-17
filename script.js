@@ -80,29 +80,41 @@ function updateTimer() {
     document.getElementById('timer').textContent = `${minutes}:${seconds}`;
 }
 
+// Start Timer ボタンのクリックイベント
 document.getElementById('startTimer').addEventListener('click', () => {
     const inputMinutes = parseInt(document.getElementById('minutes').value) || 0;
     const inputSeconds = parseInt(document.getElementById('seconds').value) || 0;
     timerTime = (inputMinutes * 60) + inputSeconds;
 
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        if (timerTime > 0) {
-            timerTime--;
-            updateTimer();
-        } else {
-            clearInterval(timerInterval);
-            document.getElementById('alertSound').play();
-            alert('Time is up!');
-        }
-    }, 1000);
+    // すでにタイマーが実行中でない場合にのみタイマーを開始する
+    if (!timerInterval) {
+        timerInterval = setInterval(() => {
+            if (timerTime > 0) {
+                timerTime--;
+                updateTimer();
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById('alertSound').play();
+                alert('Time is up!');
+            }
+        }, 1000);
+    }
 });
 
+// Stop Timer ボタンのクリックイベント
+document.getElementById('stopTimer').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+// Reset Timer ボタンのクリックイベント
 document.getElementById('resetTimer').addEventListener('click', () => {
     clearInterval(timerInterval);
+    timerInterval = null;
     timerTime = 300; // 初期値に戻す
     updateTimer();
 });
+
 
 // プリセットボタンの機能
 document.querySelectorAll('.preset').forEach(button => {
