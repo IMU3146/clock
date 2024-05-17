@@ -1,5 +1,3 @@
-// script.js
-
 // 現在の時刻を表示する時計の機能
 function updateClock() {
     const now = new Date();
@@ -65,15 +63,19 @@ document.getElementById('lapStopwatch').addEventListener('click', () => {
     laps.push(lapTime);
     const lapItem = document.createElement('li');
     lapItem.textContent = lapTime;
-    document.getElementById('laps').appendChild
-    lapItem.textContent = lapTime;
     document.getElementById('laps').appendChild(lapItem);
 });
 
 // タイマーの機能
-let timerInterval; // タイマーの間隔を格納する変数を定義
+let timerInterval;
+let timerTime = 300; // 初期値は5分 (300秒)
 
-// Start Timer ボタンのクリックイベント
+function updateTimer() {
+    const minutes = String(Math.floor(timerTime / 60)).padStart(2, '0');
+    const seconds = String(timerTime % 60).padStart(2, '0');
+    document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+}
+
 document.getElementById('startTimer').addEventListener('click', () => {
     const inputMinutes = parseInt(document.getElementById('minutes').value) || 0;
     const inputSeconds = parseInt(document.getElementById('seconds').value) || 0;
@@ -81,8 +83,7 @@ document.getElementById('startTimer').addEventListener('click', () => {
 
     // すでにタイマーが実行中でない場合にのみタイマーを開始する
     if (!timerInterval && timerTime > 0) {
-        // タイマーの最初の表示を更新する
-        updateTimer();
+        updateTimer(); // タイマーの最初の表示を更新する
 
         timerInterval = setInterval(() => {
             if (timerTime > 0) {
@@ -97,13 +98,11 @@ document.getElementById('startTimer').addEventListener('click', () => {
     }
 });
 
-// Stop Timer ボタンのクリックイベント
 document.getElementById('stopTimer').addEventListener('click', () => {
     clearInterval(timerInterval);
     timerInterval = null;
 });
 
-// Reset Timer ボタンのクリックイベント
 document.getElementById('resetTimer').addEventListener('click', () => {
     clearInterval(timerInterval);
     timerInterval = null;
