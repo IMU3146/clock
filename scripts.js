@@ -1,5 +1,3 @@
-// scripts.js
-
 // 現在の時刻を表示する時計の機能
 function updateClock() {
     const now = new Date();
@@ -127,8 +125,5 @@ function loadDarkMode() {
     }
 }
 
-// 初期表示の更新
-updateStopwatch();
-updateTimer();
 loadStopwatchTime();
 loadDarkMode();
