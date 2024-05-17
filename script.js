@@ -87,7 +87,7 @@ document.getElementById('startTimer').addEventListener('click', () => {
     timerTime = (inputMinutes * 60) + inputSeconds;
 
     // すでにタイマーが実行中でない場合にのみタイマーを開始する
-    if (!timerInterval) {
+    if (!timerInterval && timerTime > 0) {
         timerInterval = setInterval(() => {
             if (timerTime > 0) {
                 timerTime--;
